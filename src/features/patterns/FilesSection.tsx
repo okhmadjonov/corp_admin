@@ -25,6 +25,7 @@ export function FilesSection({ patternId, files }: Props) {
   const downloadInput = useRef<HTMLInputElement>(null);
   const [localError, setLocalError] = useState("");
   const [deleting, setDeleting] = useState<PatternFile | null>(null);
+  const [viewError, setViewError] = useState("");
 
   const refresh = () => qc.invalidateQueries({ queryKey: ["patterns"] });
 
@@ -96,11 +97,29 @@ export function FilesSection({ patternId, files }: Props) {
 
   const errorMessage =
     localError ||
+    viewError ||
     (upload.error && getErrorMessage(upload.error)) ||
     (makeMain.error && getErrorMessage(makeMain.error)) ||
     "";
 
   const fileName = (url: string) => url.split("/").pop() ?? url;
+
+
+  const openPdf = async (f: PatternFile) => {
+    setViewError("");
+    // oyna darrov (bosish paytida) ochiladi, aks holda brauzer popup'ni bloklaydi
+    const win = window.open("", "_blank");
+    try {
+      const blob = await patternsApi.fileContent(patternId, f.id);
+      const url = URL.createObjectURL(blob);
+      if (win) win.location.href = url;
+      else window.open(url, "_blank");
+      setTimeout(() => URL.revokeObjectURL(url), 60_000);
+    } catch (err) {
+      win?.close();
+      setViewError(getErrorMessage(err, "PDF'ni ochib bo'lmadi"));
+    }
+  };
 
   return (
     <section className={styles.section}>
@@ -139,7 +158,7 @@ export function FilesSection({ patternId, files }: Props) {
           {previews.map((f) => (
             <div key={f.id} className={styles.card}>
               <div className={styles.thumbWrap}>
-                <img className={styles.thumb} src={mediaUrl(f.url)} alt="" />
+                <img className={styles.thumb} src={mediaUrl(f.thumb_url ?? f.url)} alt="" />
                 {f.is_main && <span className={styles.badge}>Asosiy</span>}
               </div>
               <div className={styles.cardActions}>
@@ -196,6 +215,9 @@ export function FilesSection({ patternId, files }: Props) {
           {downloads.map((f) => (
             <div key={f.id} className={styles.fileRow}>
               <span>📄 {fileName(f.url)}</span>
+              <Button size="sm" variant="secondary" onClick={() => openPdf(f)}>
+                Ko'rish
+              </Button>
               <Button
                 size="sm"
                 variant="danger"

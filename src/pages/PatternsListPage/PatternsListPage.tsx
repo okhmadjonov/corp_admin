@@ -62,7 +62,7 @@ export default function PatternsListPage() {
       render: (r) => {
         const img = previewImage(r);
         return img ? (
-          <img className={styles.thumb} src={mediaUrl(img.url)} alt="" />
+          <img className={styles.thumb} src={mediaUrl(img.thumb_url ?? img.url)} alt="" />
         ) : (
           <div className={styles.noImage} />
         );

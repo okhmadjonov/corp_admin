@@ -116,7 +116,7 @@ export function ImagesSection({ clothesId, images }: Props) {
           {sorted.map((img) => (
             <div key={img.id} className={styles.card}>
               <div className={styles.thumbWrap}>
-                <img className={styles.thumb} src={mediaUrl(img.url)} alt="" />
+                <img className={styles.thumb} src={mediaUrl(img.thumb_url ?? img.url)} alt="" />
                 {img.is_main && <span className={styles.badge}>Asosiy</span>}
               </div>
               <div className={styles.cardActions}>

@@ -141,3 +141,8 @@
   border: 1px solid $color-border;
   border-radius: $radius;
 }
+
+.fileRow > span {
+  flex: 1;
+  overflow-wrap: anywhere;
+}

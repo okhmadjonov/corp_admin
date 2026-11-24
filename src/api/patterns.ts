@@ -23,4 +23,9 @@ export const patternsApi = {
     api.put<PatternFile>(`/admin/patterns/${id}/files/${fileId}`, data).then((r) => r.data),
   removeFile: (id: number, fileId: number) =>
     api.delete(`/admin/patterns/${id}/files/${fileId}`),
+  // yopiq PDF: token bilan olinadi, /media orqali ochiq emas
+  fileContent: (id: number, fileId: number) =>
+    api
+      .get<Blob>(`/admin/patterns/${id}/files/${fileId}/content`, { responseType: 'blob' })
+      .then((r) => r.data),
 }

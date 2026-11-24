@@ -2,6 +2,7 @@ import { api } from './client'
 
 export interface UploadResult {
   url: string
+  thumb_url: string | null
   file_type: 'image' | 'pdf'
   size: number
 }

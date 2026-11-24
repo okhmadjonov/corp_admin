@@ -5,6 +5,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { authApi } from "@/api/auth";
 import { tokenStorage } from "@/utils/tokenStorage";
 import type { RoleName, User } from "@/types/auth";
@@ -13,6 +14,7 @@ import { AuthContext } from "./AuthContext";
 const ADMIN_ROLES: RoleName[] = ["super_admin", "operator"];
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const qc = useQueryClient();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(() =>
     Boolean(tokenStorage.getAccess()),
@@ -56,8 +58,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const refresh = tokenStorage.getRefresh();
     if (refresh) await authApi.logout(refresh).catch(() => undefined);
     tokenStorage.clear();
+    qc.clear(); // keyingi foydalanuvchi eski ma'lumotni ko'rmasin
     setUser(null);
-  }, []);
+  }, [qc]);
 
   const value = useMemo(
     () => ({ user, loading, login, logout }),

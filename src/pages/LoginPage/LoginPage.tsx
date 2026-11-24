@@ -8,7 +8,8 @@ export default function LoginPage() {
   const { user, login } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
-  const from = (location.state as { from?: { pathname: string } } | null)?.from?.pathname ?? '/'
+  const fromLoc = (location.state as { from?: { pathname: string; search?: string; hash?: string } } | null)?.from
+  const from = fromLoc ? `${fromLoc.pathname}${fromLoc.search ?? ''}${fromLoc.hash ?? ''}` : '/'
 
   const [loginValue, setLoginValue] = useState('')
   const [password, setPassword] = useState('')

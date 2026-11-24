@@ -44,7 +44,7 @@ export default function ClothesListPage() {
       render: (r) => {
         const main = r.images.find((i) => i.is_main) ?? r.images[0]
         return main ? (
-          <img className={styles.thumb} src={mediaUrl(main.url)} alt="" />
+          <img className={styles.thumb} src={mediaUrl(main.thumb_url ?? main.url)} alt="" />
         ) : (
           <div className={styles.noImage} />
         )

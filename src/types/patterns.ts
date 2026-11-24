@@ -12,6 +12,7 @@ export type FileType = 'image' | 'pdf'
 export interface PatternFile {
   id: number
   url: string
+  thumb_url: string | null
   kind: FileKind
   file_type: FileType
   sort_order: number

@@ -38,7 +38,8 @@ api.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
     const original = error.config as RetryConfig | undefined
-    const isAuthCall = original?.url?.startsWith('/auth/')
+    // faqat token beruvchi so'rovlarda refresh qilinmaydi; /auth/me esa oddiy so'rov
+    const isAuthCall = /^\/auth\/(login|register|refresh|logout)$/.test(original?.url ?? '')
 
     if (error.response?.status === 401 && original && !original._retry && !isAuthCall) {
       original._retry = true

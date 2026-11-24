@@ -19,6 +19,7 @@ export interface ClothesVariant {
 export interface ClothesImage {
   id: number
   url: string
+  thumb_url: string | null
   sort_order: number
   is_main: boolean
 }
