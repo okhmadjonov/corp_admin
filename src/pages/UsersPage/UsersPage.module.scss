@@ -1,0 +1,80 @@
+@use "@/styles/variables" as *;
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.heading {
+  margin: 0;
+  font-size: 22px;
+}
+
+.total {
+  margin-left: 12px;
+  font-size: 14px;
+  font-weight: 400;
+  color: $color-muted;
+}
+
+.filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.search,
+.select {
+  padding: 10px 12px;
+  font-size: 14px;
+  background: #fff;
+  border: 1px solid $color-border;
+  border-radius: $radius;
+
+  &:focus {
+    outline: 2px solid rgba($color-primary, 0.3);
+    border-color: $color-primary;
+  }
+}
+
+.search {
+  width: 100%;
+  max-width: 320px;
+}
+
+.rowActions {
+  display: flex;
+  gap: 8px;
+}
+
+.badge {
+  padding: 3px 8px;
+  font-size: 12px;
+  border-radius: 999px;
+}
+
+.role_super_admin {
+  color: #7c3aed;
+  background: rgba(#7c3aed, 0.12);
+}
+
+.role_operator {
+  color: $color-primary;
+  background: rgba($color-primary, 0.12);
+}
+
+.role_user {
+  color: $color-muted;
+  background: $color-bg;
+}
+
+.error {
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: $color-danger;
+  background: rgba($color-danger, 0.08);
+  border-radius: $radius;
+}

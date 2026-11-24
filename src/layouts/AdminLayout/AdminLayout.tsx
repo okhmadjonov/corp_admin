@@ -3,6 +3,7 @@ import { Button } from "@/components/Button/Button";
 import { useAuth } from "@/features/auth/useAuth";
 import type { RoleName } from "@/types/auth";
 import styles from "./AdminLayout.module.scss";
+import { ROLE_LABELS } from "@/utils/roles";
 
 interface NavItem {
   to: string;
@@ -16,13 +17,8 @@ const NAV: NavItem[] = [
   { to: "/categories", label: "Kategoriyalar" },
   { to: "/clothes", label: "Kiyimlar" },
   { to: "/patterns", label: "Patternlar" },
+  { to: "/users", label: "Foydalanuvchilar", roles: ["super_admin"] },
 ];
-
-const ROLE_LABELS: Record<RoleName, string> = {
-  super_admin: "Super admin",
-  operator: "Operator",
-  user: "Foydalanuvchi",
-};
 
 export default function AdminLayout() {
   const { user, logout } = useAuth();
