@@ -15,6 +15,7 @@ const NAV: NavItem[] = [
   { to: "/", label: "Bosh sahifa", end: true },
   { to: "/categories", label: "Kategoriyalar" },
   { to: "/clothes", label: "Kiyimlar" },
+  { to: "/patterns", label: "Patternlar" },
 ];
 
 const ROLE_LABELS: Record<RoleName, string> = {
