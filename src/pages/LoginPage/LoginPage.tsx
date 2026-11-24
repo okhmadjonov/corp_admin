@@ -1,11 +1,13 @@
 import { useState, type FormEvent } from 'react'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { isAxiosError } from 'axios'
+import { FullPageLoader } from '@/components/FullPageLoader/FullPageLoader'
 import { useAuth } from '@/features/auth/useAuth'
+import { getErrorMessage } from '@/utils/errors'
 import styles from './LoginPage.module.scss'
 
 export default function LoginPage() {
-  const { user, login } = useAuth()
+  const { user, loading, login } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const fromLoc = (location.state as { from?: { pathname: string; search?: string; hash?: string } } | null)?.from
@@ -16,6 +18,7 @@ export default function LoginPage() {
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
+  if (loading) return <FullPageLoader /> // cookie'dagi sessiya tekshirilmoqda
   if (user) return <Navigate to={from} replace />
 
   const onSubmit = async (e: FormEvent) => {
@@ -31,7 +34,7 @@ export default function LoginPage() {
       } else if (isAxiosError(err) && err.response?.status === 401) {
         setError("Login yoki parol noto'g'ri")
       } else {
-        setError("Serverga ulanib bo'lmadi. Keyinroq urinib ko'ring")
+        setError(getErrorMessage(err)) // masalan 403: admin huquqi yo'q
       }
     } finally {
       setSubmitting(false)

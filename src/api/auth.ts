@@ -7,6 +7,6 @@ export const authApi = {
 
   me: () => api.get<User>('/auth/me').then((r) => r.data),
 
-  logout: (refresh_token: string) =>
-    api.post('/auth/logout', { refresh_token }),
+  // refresh token cookie'da; backend uni bekor qilib, cookie'ni o'chiradi
+  logout: () => api.post('/auth/logout'),
 }

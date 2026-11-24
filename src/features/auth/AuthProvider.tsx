@@ -7,7 +7,8 @@ import {
 } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { authApi } from "@/api/auth";
-import { tokenStorage } from "@/utils/tokenStorage";
+import { refreshAccessToken } from "@/api/client";
+import { session } from "@/api/session";
 import type { RoleName, User } from "@/types/auth";
 import { AuthContext } from "./AuthContext";
 
@@ -16,23 +17,27 @@ const ADMIN_ROLES: RoleName[] = ["super_admin", "operator"];
 export function AuthProvider({ children }: { children: ReactNode }) {
   const qc = useQueryClient();
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(() =>
-    Boolean(tokenStorage.getAccess()),
-  );
+  // cookie bor-yo'qligini JS bilmaydi, shuning uchun har ochilishda tekshiramiz
+  const [loading, setLoading] = useState(true);
 
-  // sahifa yangilanganda token bo'yicha foydalanuvchini tiklaydi
+  const endSession = useCallback(() => {
+    session.set(null);
+    qc.clear(); // keyingi foydalanuvchi eski ma'lumotni ko'rmasin
+    setUser(null);
+  }, [qc]);
+
+  // sahifa ochilganda: httpOnly cookie orqali access token olib, foydalanuvchini tiklaydi
   useEffect(() => {
-    if (!tokenStorage.getAccess()) return;
     let cancelled = false;
 
-    authApi
-      .me()
-      .then((me) => {
+    refreshAccessToken()
+      .then(() => authApi.me())
+      .then(async (me) => {
         if (cancelled) return;
         if (ADMIN_ROLES.includes(me.role.name)) setUser(me);
-        else tokenStorage.clear();
+        else await authApi.logout().catch(() => undefined); // rol o'zgargan
       })
-      .catch(() => tokenStorage.clear())
+      .catch(() => session.set(null)) // cookie yo'q yoki eskirgan — login sahifasi
       .finally(() => {
         if (!cancelled) setLoading(false);
       });
@@ -42,25 +47,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
+  // sessiya (refresh cookie) tugasa, axios klienti shu hodisani yuboradi
+  useEffect(() => {
+    window.addEventListener("auth:expired", endSession);
+    return () => window.removeEventListener("auth:expired", endSession);
+  }, [endSession]);
+
   const login = useCallback(async (loginName: string, password: string) => {
+    // oddiy foydalanuvchini backend o'zi 403 bilan qaytaradi (X-App: admin)
     const tokens = await authApi.login(loginName, password);
-    tokenStorage.set(tokens.access_token, tokens.refresh_token);
+    session.set(tokens.access_token);
     const me = await authApi.me();
     if (!ADMIN_ROLES.includes(me.role.name)) {
-      await authApi.logout(tokens.refresh_token).catch(() => undefined);
-      tokenStorage.clear();
+      await authApi.logout().catch(() => undefined);
+      session.set(null);
       throw new Error("FORBIDDEN_ROLE");
     }
     setUser(me);
   }, []);
 
   const logout = useCallback(async () => {
-    const refresh = tokenStorage.getRefresh();
-    if (refresh) await authApi.logout(refresh).catch(() => undefined);
-    tokenStorage.clear();
-    qc.clear(); // keyingi foydalanuvchi eski ma'lumotni ko'rmasin
-    setUser(null);
-  }, [qc]);
+    await authApi.logout().catch(() => undefined);
+    endSession();
+  }, [endSession]);
 
   const value = useMemo(
     () => ({ user, loading, login, logout }),
