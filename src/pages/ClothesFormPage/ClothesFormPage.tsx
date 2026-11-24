@@ -4,8 +4,11 @@ import { categoriesApi } from "@/api/categories";
 import { clothesApi } from "@/api/clothes";
 import { FullPageLoader } from "@/components/FullPageLoader/FullPageLoader";
 import { ClothesForm } from "@/features/clothes/ClothesForm";
+import { ImagesSection } from "@/features/clothes/ImagesSection";
+import { VariantsSection } from "@/features/clothes/VariantsSection";
 import type { ClothesInput, NamedItem, Tag } from "@/types/clothes";
 import { getErrorMessage } from "@/utils/errors";
+import styles from "./ClothesFormPage.module.scss";
 
 export default function ClothesFormPage() {
   const { id } = useParams();
@@ -49,12 +52,17 @@ export default function ClothesFormPage() {
     genders.data && seasons.data && tags.data && (isNew || clothesQuery.data);
   if (!ready) return <FullPageLoader />;
 
+  const clothes = clothesQuery.data;
+
   return (
-    <div>
-      <h1>{isNew ? "Yangi kiyim" : clothesQuery.data?.name}</h1>
+    <div className={styles.stack}>
+      <h1 className={styles.heading}>
+        {isNew ? "Yangi kiyim" : clothes?.name}
+      </h1>
+
       <ClothesForm
-        key={clothesQuery.data?.id ?? "new"}
-        initial={clothesQuery.data}
+        key={clothes?.id ?? "new"}
+        initial={clothes}
         genders={genders.data}
         seasons={seasons.data}
         tags={tags.data}
@@ -64,6 +72,22 @@ export default function ClothesFormPage() {
         onSubmit={(data) => save.mutate(data)}
         onCancel={() => navigate("/clothes")}
       />
+
+      {isNew ? (
+        <p className={styles.hint}>
+          Rasm va variantlarni kiyim saqlangandan keyin shu sahifada qo'shasiz.
+        </p>
+      ) : (
+        clothes && (
+          <>
+            <ImagesSection clothesId={clothes.id} images={clothes.images} />
+            <VariantsSection
+              clothesId={clothes.id}
+              variants={clothes.variants}
+            />
+          </>
+        )
+      )}
     </div>
   );
 }

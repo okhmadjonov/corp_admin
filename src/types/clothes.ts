@@ -58,3 +58,17 @@ export interface ClothesInput {
   tag_ids: number[]
   pattern_ids: number[]
 }
+
+export interface VariantInput {
+  size: string
+  color: string
+  price: string
+  stock_quantity: number
+  sku: string
+}
+
+export interface ImageInput {
+  url: string
+  sort_order: number
+  is_main: boolean
+}
