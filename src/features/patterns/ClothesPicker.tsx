@@ -54,10 +54,10 @@ export function ClothesPicker({ selected, onChange }: Props) {
 
       <div className={styles.list}>
         {isLoading && <div className={styles.info}>Yuklanmoqda...</div>}
-        {data?.length === 0 && (
+        {data?.items.length === 0 && (
           <div className={styles.info}>Kiyim topilmadi</div>
         )}
-        {data?.map((c) => (
+        {data?.items.map((c) => (
           <label key={c.id} className={styles.item}>
             <input
               type="checkbox"

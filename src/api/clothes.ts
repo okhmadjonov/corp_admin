@@ -1,4 +1,5 @@
 import { api } from './client'
+import type { Page } from '@/types/common'
 import type {
   Clothes,
   ClothesImage,
@@ -16,7 +17,7 @@ export interface ClothesListParams {
 
 export const clothesApi = {
   list: (params: ClothesListParams) =>
-    api.get<Clothes[]>('/admin/clothes', { params }).then((r) => r.data),
+    api.get<Page<Clothes>>('/admin/clothes', { params }).then((r) => r.data),
   get: (id: number) => api.get<Clothes>(`/admin/clothes/${id}`).then((r) => r.data),
   create: (data: ClothesInput) => api.post<Clothes>('/admin/clothes', data).then((r) => r.data),
   update: (id: number, data: ClothesInput) =>

@@ -106,8 +106,8 @@ export default function ClothesListPage() {
 
       {error && <div className={styles.error}>{getErrorMessage(error)}</div>}
 
-      <Table columns={columns} rows={data} rowKey={(r) => r.id} loading={isLoading} />
-      <Pagination page={page} hasNext={(data?.length ?? 0) === PAGE_SIZE} onChange={setPage} />
+      <Table columns={columns} rows={data?.items} rowKey={(r) => r.id} loading={isLoading} />
+      <Pagination page={page} hasNext={data ? (page + 1) * PAGE_SIZE < data.total : false} onChange={setPage} />
 
       <Modal open={deleting !== null} title="O'chirishni tasdiqlang" onClose={() => setDeleting(null)}>
         <p>

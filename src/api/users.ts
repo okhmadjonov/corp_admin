@@ -1,6 +1,7 @@
 import { api } from './client'
 import type { RoleName } from '@/types/auth'
-import type { AdminUser, Page, UserCreate, UserUpdate } from '@/types/users'
+import type { Page } from '@/types/common'
+import type { AdminUser, UserCreate, UserUpdate } from '@/types/users'
 
 export interface UsersParams {
   limit: number

@@ -8,13 +8,6 @@ export interface AdminUser {
   created_at: string
 }
 
-export interface Page<T> {
-  items: T[]
-  total: number
-  limit: number
-  offset: number
-}
-
 export interface UserCreate {
   login: string
   password: string

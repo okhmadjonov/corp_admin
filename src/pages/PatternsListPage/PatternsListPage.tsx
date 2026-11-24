@@ -145,13 +145,13 @@ export default function PatternsListPage() {
 
       <Table
         columns={columns}
-        rows={data}
+        rows={data?.items}
         rowKey={(r) => r.id}
         loading={isLoading}
       />
       <Pagination
         page={page}
-        hasNext={(data?.length ?? 0) === PAGE_SIZE}
+        hasNext={data ? (page + 1) * PAGE_SIZE < data.total : false}
         onChange={setPage}
       />
 

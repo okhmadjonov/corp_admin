@@ -1,4 +1,5 @@
 import { api } from './client'
+import type { Page } from '@/types/common'
 import type { FileInput, Pattern, PatternFile, PatternInput } from '@/types/patterns'
 
 export interface PatternListParams {
@@ -9,7 +10,7 @@ export interface PatternListParams {
 
 export const patternsApi = {
   list: (params: PatternListParams) =>
-    api.get<Pattern[]>('/admin/patterns', { params }).then((r) => r.data),
+    api.get<Page<Pattern>>('/admin/patterns', { params }).then((r) => r.data),
   get: (id: number) => api.get<Pattern>(`/admin/patterns/${id}`).then((r) => r.data),
   create: (data: PatternInput) => api.post<Pattern>('/admin/patterns', data).then((r) => r.data),
   update: (id: number, data: PatternInput) =>
