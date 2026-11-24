@@ -1,0 +1,58 @@
+@use "@/styles/variables" as *;
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.title {
+  margin: 0;
+  font-size: 18px;
+}
+
+.rowActions {
+  display: flex;
+  gap: 8px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+
+  input {
+    padding: 10px 12px;
+    font-size: 15px;
+    border: 1px solid $color-border;
+    border-radius: $radius;
+
+    &:focus {
+      outline: 2px solid rgba($color-primary, 0.3);
+      border-color: $color-primary;
+    }
+  }
+}
+
+.error {
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: $color-danger;
+  background: rgba($color-danger, 0.08);
+  border-radius: $radius;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}

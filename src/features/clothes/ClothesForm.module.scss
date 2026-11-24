@@ -1,0 +1,98 @@
+@use "@/styles/variables" as *;
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 720px;
+  padding: 24px;
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+
+  input,
+  textarea,
+  select {
+    padding: 10px 12px;
+    font: inherit;
+    font-size: 15px;
+    background: #fff;
+    border: 1px solid $color-border;
+    border-radius: $radius;
+
+    &:focus {
+      outline: 2px solid rgba($color-primary, 0.3);
+      border-color: $color-primary;
+    }
+  }
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  padding: 6px 12px;
+  font-size: 13px;
+  color: $color-text;
+  background: $color-bg;
+  border: 1px solid $color-border;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.chipOn {
+  color: #fff;
+  background: $color-primary;
+  border-color: $color-primary;
+}
+
+.muted {
+  color: $color-muted;
+  font-size: 13px;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.error,
+.success {
+  padding: 10px 12px;
+  font-size: 14px;
+  border-radius: $radius;
+}
+
+.error {
+  color: $color-danger;
+  background: rgba($color-danger, 0.08);
+}
+
+.success {
+  color: $color-success;
+  background: rgba($color-success, 0.1);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
